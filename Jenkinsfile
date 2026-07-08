@@ -58,7 +58,11 @@ pipeline {
         // -------- CD : build + push Docker Hub (uniquement sur main) --------
         stage('Build & Push Docker Hub') {
             when {
-                branch 'main'
+                anyOf {
+                    branch 'main'
+                    expression { env.GIT_BRANCH == 'origin/main' }
+                    expression { env.GIT_BRANCH == 'main' }
+                }
             }
             steps {
                 // 'dockerhub' = identifiants (username + token) créés dans Jenkins.
